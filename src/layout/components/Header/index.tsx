@@ -16,6 +16,7 @@ import {
   Skeleton,
   useColorMode,
 } from "@chakra-ui/react"
+import { css } from "@emotion/css"
 import { RiLogoutCircleRLine, RiMoonLine, RiSunLine } from "@remixicon/react"
 import { toString } from "lodash"
 import { signIn, signOut, useSession } from "next-auth/react"
@@ -29,7 +30,14 @@ const Header = () => {
   const { colorMode, toggleColorMode } = useColorMode()
 
   return (
-    <header className={twclx(["w-full flex justify-between items-center h-12 px-6 sm:px-12 sticky top-0 shadow z-40"])}>
+    <header
+      className={twclx([
+        "w-full flex justify-between items-center h-12 px-6 sm:px-12 sticky top-0 shadow z-40",
+        css`
+          background-color: var(--chakra-colors-chakra-body-bg);
+        `,
+      ])}
+    >
       <Link href={auth ? "/" : "/signin"}>
         <Logo />
       </Link>

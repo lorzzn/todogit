@@ -2,22 +2,8 @@ import { Task } from "@/models/task"
 import { getAppRepoPath, ghapi, validateGhapiResponse } from "@/utils/ghapi"
 import { buildQuery } from "@/utils/url"
 import { Endpoints } from "@octokit/types"
-import { pick } from "lodash"
 import { z } from "zod"
 import { procedure, router } from ".."
-
-const issueDataPickKeys = [
-  "id",
-  "url",
-  "title",
-  "body",
-  "labels",
-  "created_at",
-  "updated_at",
-  "html_url",
-  "number",
-  "node_id",
-]
 
 export const task = router({
   get: procedure.input(z.object({ number: z.number() })).query(async ({ input, ctx }) => {
@@ -25,9 +11,8 @@ export const task = router({
     const response = await ghapi(`/repos/${getAppRepoPath(session)}/issues/${input.number}`, session?.token)
     await validateGhapiResponse(response)
 
-    const _data =
+    const data =
       (await response.json()) as Endpoints["GET /repos/{owner}/{repo}/issues/{issue_number}"]["response"]["data"]
-    const data = pick(_data, issueDataPickKeys)
     return data
   }),
   list: procedure
@@ -56,14 +41,8 @@ export const task = router({
 
       const response = await ghapi(`/repos/${getAppRepoPath(session)}/issues?${query}`, session?.token)
       await validateGhapiResponse(response)
-      const data = (await response.json()) as Endpoints["GET /repos/{owner}/{repo}/issues"]["response"]["data"]
+      const items = (await response.json()) as Endpoints["GET /repos/{owner}/{repo}/issues"]["response"]["data"]
 
-      const items = data.map((item) => {
-        const picked = pick(item, issueDataPickKeys)
-        return {
-          ...picked,
-        }
-      })
       const nextCursor = items.length > input.limit ? page + 1 : null
 
       return {
@@ -95,6 +74,8 @@ export const task = router({
       z.object({
         number: z.number(),
         content: z.string(),
+        is_archived: z.boolean(),
+        is_completed: z.boolean(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
