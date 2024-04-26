@@ -1,4 +1,6 @@
 import Layout from "@/layout"
+import theme from "@/theme"
+import { ColorModeScript } from "@chakra-ui/react"
 import type { Metadata } from "next"
 import "./globals.css"
 
@@ -15,6 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
         <Layout>{children}</Layout>
       </body>
     </html>
