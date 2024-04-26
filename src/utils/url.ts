@@ -51,3 +51,25 @@ export function removeQueryStringValue(key: string) {
 
   window.history.pushState({ path: newUrl }, "", newUrl)
 }
+
+export const buildQuery = (query: any) => {
+  let queryString = ""
+  for (const key in query) {
+    const value = encodeURIComponent(query[key])
+    if (value) {
+      queryString += `${key}=${value}&`
+    }
+  }
+  return queryString.slice(0, -1)
+}
+
+export const buildGhapiQuery = (query: any) => {
+  let queryString = ""
+  for (const key in query) {
+    const value = encodeURIComponent(query[key])
+    if (query[key]) {
+      queryString += `${key}:${value}+`
+    }
+  }
+  return queryString.slice(0, -1)
+}
