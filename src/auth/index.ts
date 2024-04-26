@@ -40,15 +40,6 @@ const providers: Provider[] = [
   }),
 ]
 
-export const providerMap = providers.map((provider: any) => {
-  if (typeof provider === "function") {
-    const providerData = provider()
-    return { id: providerData.id, name: providerData.name }
-  } else {
-    return { id: provider.id, name: provider.name }
-  }
-})
-
 const authOptions: NextAuthOptions = {
   providers,
   session: {
@@ -78,7 +69,7 @@ const authOptions: NextAuthOptions = {
     },
   },
   pages: {
-    // signIn: "/signin",
+    signIn: "/signin",
   },
   secret: env.NEXTAUTH_SECRET,
 }
