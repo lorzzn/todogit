@@ -90,10 +90,7 @@ export const task = router({
       await validateGhapiResponse(response)
       const data =
         (await response.json()) as Endpoints["PATCH /repos/{owner}/{repo}/issues/{issue_number}"]["response"]["data"]
-      return {
-        id: data.id,
-        url: data.html_url,
-      }
+      return data
     }),
   delete: procedure
     .input(
