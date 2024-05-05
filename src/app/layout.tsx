@@ -20,7 +20,7 @@ export default async function RootLayout({
 }>) {
   const pathname = getPathname()
   let repo
-  if (pathname !== "/setup") {
+  if (pathname && !["/setup", "/signip"].includes(pathname)) {
     repo = await caller.repo.get()
     if (!repo) {
       return redirect("/setup")
